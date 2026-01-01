@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=BBH+Bartle&family=Days+One&family=Rubik+Mono+One&family=Seymour+One&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Days One', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        0 10px 30px rgba(0, 0, 0, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .name-avatar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #667eea;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            outline: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                        0 5px 15px rgba(0, 0, 0, 0.2),
+                        inset 0 2px 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .avatar-container::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: -30px;
+            right: -30px;
+            bottom: -30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 400% 400%;
+            z-index: -1;
+            opacity: 0.6;
+            animation: highlightRotate 3s linear infinite;
+            filter: blur(15px);
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.6),
+                        0 0 50px rgba(118, 75, 162, 0.4),
+                        0 0 70px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes highlightRotate {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .name {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5),
+                        0 4px 16px rgba(0, 0, 0, 0.4),
+                        0 0 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .first-name {
+            animation: slideInLeft 0.6s ease-out 0.4s both;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .last-name {
+            animation: slideInRight 0.6s ease-out 0.6s both;
+            color: white;
+            line-height: 1.2;
+            text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5),
+                        0 4px 16px rgba(0, 0, 0, 0.4),
+                        0 0 30px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            animation: fadeIn 0.8s ease-out 0.6s both;
+            min-height: 80px;
+            text-align: left;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15),
+                        0 2px 10px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .social-networks {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4),
+                        0 4px 12px rgba(0, 0, 0, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                rgba(255, 255, 255, 0.3) 30%,
+                rgba(255, 255, 255, 0.6) 50%,
+                rgba(255, 255, 255, 0.3) 70%,
+                transparent 100%);
+            animation: shimmer 2s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+            border-radius: 12px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .social-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5),
+                        0 6px 18px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .social-item:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .social-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .social-label {
+            flex: 1;
+            text-align: left;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-username {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        /* Плавающие частицы фона */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-100vh) translateX(50px);
+            }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .name-avatar-wrapper {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .avatar {
+                width: 120px;
+                height: 120px;
+            }
+
+            .name {
+                font-size: 36px;
+                align-items: center;
+            }
+
+            .description {
+                font-size: 14px;
+                padding: 15px;
+            }
+
+            .social-item {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="hon.mp4" type="video/mp4">
+    </video>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="name-avatar-wrapper">
+            <div class="avatar-container">
+                <img src="edgar.jpg" alt="Аватар" class="avatar" id="avatar">
+            </div>
+            
+            <h1 class="name" id="name">
+                <span class="first-name" id="firstName">Edgar</span>
+                <span class="last-name" id="lastName">Sanasaryan</span>
+            </h1>
+        </div>
+        
+        <!--<div class="description" id="description">Inventor, innovator, creator</div>-->
+        
+        <div class="social-networks" id="socialNetworks">
+            <a href="#" class="social-item" data-platform="telegram">
+                <span class="social-icon">
+                    <img src="telegram.png" alt="Telegram">
+                </span>
+                <span class="social-label">
+                    Telegram
+                    <div class="social-username">@username</div>
+                </span>
+            </a>
+            <a href="#" class="social-item" data-platform="whatsapp">
+                <span class="social-icon">
+                    <img src="whatsapp.png" alt="WhatsApp">
+                </span>
+                <span class="social-label">
+                    WhatsApp
+                    <div class="social-username">+1234567890</div>
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Создание плавающих частиц
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Анимация при наведении на социальные сети
+        function setupSocialAnimations() {
+            const socialItems = document.querySelectorAll('.social-item');
+            
+            socialItems.forEach((item, index) => {
+                item.style.animationDelay = `${0.8 + index * 0.1}s`;
+                
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        }
+
+
+        // Эффект при клике на элементы
+        function setupClickEffects() {
+            const clickableElements = document.querySelectorAll('.social-item');
+            
+            clickableElements.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s ease-out';
+                    ripple.style.pointerEvents = 'none';
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+        }
+
+        // Добавление CSS для ripple эффекта
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Инициализация при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            setupSocialAnimations();
+            setupClickEffects();
+        });
+
+        // Анимация при скролле (если контент будет больше экрана)
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Применение observer к элементам
+        document.querySelectorAll('.social-item').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body> 
+</html>
+
